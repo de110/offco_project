@@ -61,29 +61,32 @@ public class ChatRoomController {
 
     @GetMapping("/room")
     @ResponseBody
-    public List<ChatRoom> roomname(@RequestParam(value="id") Long id) {
-        return chatService.findByRoomId(id);
+    public List<ChatMember> roomname(@RequestParam ChatRoom chatroom) {
+        // return chatService.findByRoomId(1L);
+        
+        return chatMemberRepository.findByroomId(chatroom);
+
     }
 
-    @GetMapping("/roomId")
-    @ResponseBody
-    public List<ChatMember> rooms(@RequestParam(value = "id") User user) {
-        return chatService.findAllMembers(user);
-    }
+    // @GetMapping("/roomId")
+    // @ResponseBody
+    // public List<ChatMember> rooms(@RequestParam(value = "id") Long id) {
+    //     return chatService.findAllMembers(id);
+    // }
 
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom create(@RequestBody ChatRoom chatRoom ) {
+    public ChatRoom create(@RequestBody ChatRoom chatRoom) {
         return chatService.create(chatRoom);
     }
 
     // RoomId 로 특정 채팅방 조회
-    @GetMapping("/roominfo")
-    @ResponseBody
-    public List<ChatRoom> getRoomParam(@RequestParam Long roomId) {
-        return chatService.findByRoomId(roomId);
-    }
+    // @GetMapping("/roominfo")
+    // @ResponseBody
+    // public List<ChatRoom> getRoomParam(@RequestParam Long roomId) {
+    //     return chatService.findByRoomId(roomId);
+    // }
 
     @DeleteMapping("/room/delete")
     public void deleteChatRoom(@RequestParam String roomId) {
@@ -103,14 +106,15 @@ public class ChatRoomController {
     }
 
 
-    @GetMapping("/testmember")
-    @ResponseBody
-    public List<ChatMember> getAllMember(@RequestBody User user) {
-        // return chatService.findAllMembers(1L);
-        // user = userRepository.findById(user.getId()).get();
-        return chatMemberRepository.findByUserId(user);
-        // "id":1
-    }
+    // @GetMapping("/testmember")
+    // @ResponseBody
+    // public List<ChatMember> getAllMember(@RequestParam Long id) {
+    //     // return chatService.findAllMembers(1L);
+    //     // User user = userRepository.findById(1L).get();
+    //     // return chatMemberRepository.findByUserId(user);
+    //     return chatMemberRepository.findByRoomId(id);
+    //     // "id":1
+    // }
 
     @GetMapping("/allmember")
     @ResponseBody

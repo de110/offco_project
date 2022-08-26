@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public UserDetails login(@RequestParam(value = "userId") String username) {
-        return userService.loadUserByUsername(username);
+    public UserDetails login(@RequestParam(value = "userId") String userId) {
+        return userService.loadUserByUsername(userId);
     }   
     // @GetMapping("/login")
     // public UserDetails login(@RequestBody User user) {

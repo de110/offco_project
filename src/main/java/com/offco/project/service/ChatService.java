@@ -51,10 +51,11 @@ public class ChatService {
         return result;
     }
 
-    // 채팅방 하나 불러오기
-    public List<ChatRoom> findByRoomId(Long roomId) {
-        return chatRepository.findByRoomId(roomId);
-    }
+    // // 채팅방 하나 불러오기
+    // public List<ChatMember> findByRoomId(Long roomId) {
+    //     // return chatRepository.findByRoomId(roomId);
+    //     return chatMemberRepository.findByRoom_Id(roomId);
+    // }
 
     public List<ChatRoom> findByInviteUrl(String url) {
         return chatRepository.findByInviteUrl(url);
@@ -69,13 +70,13 @@ public class ChatService {
 
     // }
 
-    
     @Transactional
     public ChatRoom save(String inviteUrl) {
         ChatRoom chatRoom = chatRepository.findById(1L).get();
         chatRoom.setInviteUrl(inviteUrl);
         return chatRepository.save(chatRoom);
     }
+
     @Transactional
     public ChatRoom create(ChatRoom chatRoom) {
         chatRepository.save(chatRoom); // room 정보 저장
@@ -88,8 +89,6 @@ public class ChatService {
 
         chatMemberRepository.save(chatMember);
 
-        
-        
         return chatRoom;
     }
 
@@ -110,12 +109,12 @@ public class ChatService {
         chatRepository.deleteByRoomId(roomId);
     }
 
-    @Transactional
-    public List<ChatMember> findAllMembers(User user) {
-        // return chatMemberRepository.findByUserId(user.getId());
-        return chatMemberRepository.findByUserId(user);
-
-    }
+    // @Transactional
+    // public List<ChatMember> findAllMembers(Long roomId) {
+    //     // return chatMemberRepository.findByUserId(user.getId());
+    //     // return chatMemberRepository.findByUserId(user);
+    //     return chatMemberRepository.findByRoom_Id(roomId);
+    // }
 
     @Transactional
     public List<ChatMember> allmem() {
