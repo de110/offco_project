@@ -39,5 +39,4 @@ public class ChatMember {
         this.userId = userId;
         this.roomId = roomId;
     }
-    
 }

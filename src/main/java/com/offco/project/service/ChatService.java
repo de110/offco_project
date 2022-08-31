@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.offco.project.domain.ChatMember;
@@ -78,13 +79,13 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoom create(ChatRoom chatRoom) {
+    public ChatRoom create(ChatRoom chatRoom, User user) {
         chatRepository.save(chatRoom); // room 정보 저장
 
         ChatMember chatMember = new ChatMember(); // room member 설정
-        chatMember.setRoomId(chatRepository.findById(1L).get());
+        chatMember.setRoomId(chatRoom);
 
-        User user = userRepository.findById(1L).get();
+        // user = userRepository.findById(user.getId()).get();
         chatMember.setUserId(user);
 
         chatMemberRepository.save(chatMember);

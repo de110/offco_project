@@ -1,5 +1,7 @@
 package com.offco.project.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,9 +30,10 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user= userRepository.findByUsername(username).orElseThrow(()->{
+        User user = userRepository.findByUsername(username).orElseThrow(() -> {
             return new UsernameNotFoundException("Not Found");
         });
         return user;
     }
+    
 }

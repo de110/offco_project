@@ -17,6 +17,8 @@ import com.offco.project.repository.ChatRepository;
 import com.offco.project.repository.UserRepository;
 import com.offco.project.service.ChatService;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +47,7 @@ public class ChatRoomController {
     private final UserRepository userRepository;
     private final ChatMemberRepository chatMemberRepository;
 
+    private final ChatRepository chatRepository;
 
     @PostConstruct
     // 의존관게 주입완료되면 실행되는 코드
@@ -61,11 +64,25 @@ public class ChatRoomController {
 
     @GetMapping("/room")
     @ResponseBody
-    public List<ChatMember> roomname(@RequestParam ChatRoom chatroom) {
+    public Optional<ChatRoom> roomname(@RequestParam Long roomId) {
         // return chatService.findByRoomId(1L);
-        
-        return chatMemberRepository.findByroomId(chatroom);
+        return chatRepository.findById(roomId);
 
+    }
+
+    @GetMapping("/room/users")
+    @ResponseBody
+    public List<ChatMember> roomUsers(@RequestParam ChatRoom chatroom) {
+        return chatMemberRepository.findByroomId(chatroom);
+    }
+
+    @GetMapping("/loging")
+    @ResponseBody
+    public String currentUser(@AuthenticationPrincipal User user) {
+        // ChatMember chatMember = new ChatMember(); // room member 설정
+        // chatMember = chatMemberRepository.findById(1L).get();
+        // chatMember.setUserId(user);
+        return user.getUsername();
     }
 
     // @GetMapping("/roomId")
@@ -77,8 +94,9 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom create(@RequestBody ChatRoom chatRoom) {
-        return chatService.create(chatRoom);
+    public Long create(@RequestBody ChatRoom chatRoom,@AuthenticationPrincipal User user) {
+        chatService.create(chatRoom, user);
+        return user.getId();
     }
 
     // RoomId 로 특정 채팅방 조회
@@ -120,6 +138,14 @@ public class ChatRoomController {
     @ResponseBody
     public List<ChatMember> gallme() {
         return chatService.allmem();
-    }   
+    }
+
+
+    @GetMapping("/loginuser")
+    @ResponseBody
+    public String currentUserName() {
+        User users = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return users.getUsername();
+    }
     
 }

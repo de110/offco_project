@@ -14,8 +14,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.offco.project.service.UserService;
@@ -24,7 +28,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug=true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication
@@ -38,29 +42,33 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // @Bean
-    // public AuthenticationProvider authenticationProvider(){
-    //     return new CustomAuthe
-    // }
-
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        
-        http.formLogin().loginPage("/login").permitAll();
 
-        http.formLogin().loginProcessingUrl("/login");
+        // http.formLogin().loginPage("/login").permitAll();
+
+        http.formLogin().loginProcessingUrl("/login")
+                .and()
+                .sessionManagement()
+                .maximumSessions(1);
         http
                 .authorizeRequests()
                 .antMatchers("/static/css/**", "/static/img/**",
-                        "/static/js/**", "/static/**", "/**/*")
+                "/static/js/**", "/static/**", "/**/*")
                 .permitAll()
-                .anyRequest().authenticated()
+                // .antMatchers("/").permitAll()
+                // .anyRequest().authenticated()
+                .antMatchers("/login?userId","/login").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .csrf().disable();
 
+        // http.formLogin().permitAll().defaultSuccessUrl("/");
+
+        // http.logout().logoutUrl("/logout").logoutSuccessUrl("/suc").invalidateHttpSession(true).deleteCookies("JSESSIONID");
         return http.build();
-        
     }
+    
 }
 

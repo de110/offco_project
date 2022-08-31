@@ -44,15 +44,15 @@ public class UserController {
     @GetMapping("/login")
     public UserDetails login(@RequestParam(value = "userId") String userId) {
         return userService.loadUserByUsername(userId);
-    }   
-    // @GetMapping("/login")
-    // public UserDetails login(@RequestBody User user) {
-    //     return userService.loadUserByUsername(user.getUsername());
-    // }
-    @GetMapping("/getuser")
-    public String username(@AuthenticationPrincipal User user) {
-        return user.getUsername();
     }
+
+    // @GetMapping("/login")
+    // public String login(String userId) {
+    //     // return userService.loadUserByUsername(userId);
+    //     return "";
+    // }
+
+    
 
     // @GetMapping("/signup")
     // public boolean checkIdDuplicate(){
