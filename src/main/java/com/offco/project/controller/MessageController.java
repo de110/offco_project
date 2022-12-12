@@ -2,7 +2,6 @@ package com.offco.project.controller;
 
 import java.util.List;
 
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.ui.Model;
@@ -39,8 +38,6 @@ public class MessageController {
                 message);
 
         return chatService.saveMessage(message);
-        // ChatMessage chatMessage = new ChatMessage();
-        // return message;
 
     }
 

@@ -3,6 +3,7 @@ package com.offco.project.service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Service;
 import com.offco.project.domain.ChatMember;
 import com.offco.project.domain.ChatMessage;
 import com.offco.project.domain.ChatRoom;
+import com.offco.project.domain.Invite;
 import com.offco.project.domain.User;
+import com.offco.project.dto.UserDto;
 import com.offco.project.repository.ChatMemberRepository;
 import com.offco.project.repository.ChatRepository;
+import com.offco.project.repository.InviteRepository;
 import com.offco.project.repository.MessageRepository;
 import com.offco.project.repository.UserRepository;
 
@@ -31,72 +35,40 @@ public class ChatService {
     private final MessageRepository messageRepository;
     private final ChatMemberRepository chatMemberRepository;
     private final UserRepository userRepository;
-    private Map<String, ChatRoom> chatRooms;
+    private final InviteRepository inviteRepository;
 
-    @PostConstruct
-    // 의존관게 주입완료되면 실행되는 코드
-    private void init() {
-        chatRooms = new LinkedHashMap<>();
-    }
-
-    // 채팅방 불러오기
     public List<ChatRoom> findAllRoom() {
-        // 채팅방 최근 생성 순으로 반환
         List<ChatRoom> result = chatRepository.findAll();
-        // Collections.reverse(result);
-        // List<ChatRoom> result = new ArrayList<>(chatRooms.values());
-        // Collections.reverse(result);
-
-        // return result;
         log.info("result: {}", result);
         return result;
     }
 
-    // // 채팅방 하나 불러오기
-    // public List<ChatMember> findByRoomId(Long roomId) {
-    //     // return chatRepository.findByRoomId(roomId);
-    //     return chatMemberRepository.findByRoom_Id(roomId);
-    // }
-
-    public List<ChatRoom> findByInviteUrl(String url) {
-        return chatRepository.findByInviteUrl(url);
-    }
-    // @Transactional
-    // public ChatRoom createRoom(String name, String host, String guest) {
-    //     ChatRoom chatRoom = ChatRoom.create(name, host, guest);
-    //     // return chatRoom;
-    //     // chatRooms.put(chatRoom.getRoomId(), chatRoom);
-
-    //     return chatRepository.save(chatRoom);
-
-    // }
-
     @Transactional
-    public ChatRoom save(String inviteUrl) {
+    public ChatRoom save(Invite invite) {
         ChatRoom chatRoom = chatRepository.findById(1L).get();
-        chatRoom.setInviteUrl(inviteUrl);
+        inviteRepository.save(invite);
+        chatRoom.setInvite(invite);
         return chatRepository.save(chatRoom);
     }
 
     @Transactional
-    public ChatRoom create(ChatRoom chatRoom, User user) {
-        chatRepository.save(chatRoom); // room 정보 저장
-
+    public ChatRoom create(ChatRoom chatRoom, String username) {
+        User user = userRepository.findByUsername(username).get();
+        chatRoom.setUser(user);
         ChatMember chatMember = new ChatMember(); // room member 설정
         chatMember.setRoomId(chatRoom);
-
-        // user = userRepository.findById(user.getId()).get();
-        chatMember.setUserId(user);
-
         chatMemberRepository.save(chatMember);
+        return chatRepository.save(chatRoom);
+    }
 
-        return chatRoom;
+    public ChatRoom test(ChatRoom chatRoom, String username) {
+        User user = userRepository.findByUsername(username).get();
+        chatRoom.setUser(user);
+        return chatRepository.save(chatRoom);
     }
 
     @Transactional
     public ChatMessage saveMessage(ChatMessage chatMessage) {
-        // ChatMessage chatMessage = new ChatMessage();
-        // chatRooms.put(chatRoom.getRoomId(), chatMessage);
         return messageRepository.save(chatMessage);
     }
 
@@ -110,15 +82,8 @@ public class ChatService {
         chatRepository.deleteByRoomId(roomId);
     }
 
-    // @Transactional
-    // public List<ChatMember> findAllMembers(Long roomId) {
-    //     // return chatMemberRepository.findByUserId(user.getId());
-    //     // return chatMemberRepository.findByUserId(user);
-    //     return chatMemberRepository.findByRoom_Id(roomId);
-    // }
-
     @Transactional
-    public List<ChatMember> allmem() {
+    public List<ChatMember> allmembyroomId() {
         return chatMemberRepository.findAll();
     }
 

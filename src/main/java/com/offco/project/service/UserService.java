@@ -16,13 +16,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
     @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
     }
-    
+
     @Transactional
     public boolean existByUsername(String username) {
         return userRepository.existsByUsername(username);
@@ -33,7 +34,7 @@ public class UserService implements UserDetailsService{
         User user = userRepository.findByUsername(username).orElseThrow(() -> {
             return new UsernameNotFoundException("Not Found");
         });
-        return user;
+        return new User(user.getUsername(), user.getPassword(), user.getRole());
     }
-    
+
 }

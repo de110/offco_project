@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 public class User implements UserDetails {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="USER_ID")
+    @Column(name = "USER_ID")
     Long id;
 
     @Column
@@ -41,10 +41,9 @@ public class User implements UserDetails {
     @Column
     String role;
 
-    // @JoinColumn
-
     @Builder
     public User(String username, String userpassword, String role) {
+        // this.id = id;
         this.username = username;
         this.userpassword = userpassword;
         this.role = role;
@@ -84,9 +83,9 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
         // for (String role : this.role.split(",")) {
-        //     roles.add(new SimpleGrantedAuthority(role));
+        // roles.add(new SimpleGrantedAuthority(role));
         // }
         return roles;
     }
-    
+
 }

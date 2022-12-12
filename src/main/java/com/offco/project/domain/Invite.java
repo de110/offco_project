@@ -5,35 +5,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@NoArgsConstructor
 @Getter
 @Setter
-public class ChatMember {
+@NoArgsConstructor
+@Entity
+public class Invite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEM_ID")
+    @Column(name = "TokenId")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User userId;
+    @Column
+    private String inviteUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "ROOM_ID")
-    private ChatRoom roomId;
+    @Column
+    private Boolean useToken;
 
     @Builder
-    public ChatMember(User userId, ChatRoom roomId) {
-        this.userId = userId;
-        this.roomId = roomId;
+    public Invite(String inviteUrl, Boolean useToken) {
+        this.inviteUrl = inviteUrl;
+        this.useToken = useToken;
     }
 }

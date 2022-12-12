@@ -1,6 +1,5 @@
 package com.offco.project.controller;
 
-
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +24,6 @@ public class CalendarController {
         calendarService.save(calendar);
 
     }
-    
-    // @GetMapping("/todolist")
-    // public List<Calendar> getCalendar() {
-    //     return calendarService.getCalendar();
-    // }
 
     @GetMapping("/todolist")
     public List<Calendar> getCalendarByroomId() {
