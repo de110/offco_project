@@ -27,7 +27,6 @@ import com.offco.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-// @Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
@@ -51,8 +50,8 @@ public class UserController {
 
     @PostMapping("/login")
     public UserDetails login(@RequestParam String username) {
-        return userService.loadUserByUsername("a");
-    }
+        return userService.loadUserByUsername(username);
+    } //
 
     @GetMapping("/loging")
     @ResponseBody
@@ -60,8 +59,4 @@ public class UserController {
         return user.getUsername();
     }
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
 }

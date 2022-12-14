@@ -16,7 +16,7 @@ public interface ChatRepository extends JpaRepository<ChatRoom, Long> {
 
     Optional<ChatRoom> findByRoomname(String roomname);
 
-    List<ChatRoom> findByInvite(Invite invite);
+    Optional<ChatRoom> findByInvite(Invite invite);
 
     // List<ChatRoom> findByInviteUrl(String inviteUrl);
     long deleteByRoomId(String roomId);

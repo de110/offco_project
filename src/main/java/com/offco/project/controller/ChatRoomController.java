@@ -40,51 +40,59 @@ public class ChatRoomController {
     private final UserRepository userRepository;
     private final ChatMemberRepository chatMemberRepository;
     private final ChatRepository chatRepository;
+    private final InviteRepository inviteRepository;
 
+    // 방 생성
     @PostMapping("/api/room")
-    public void create(@RequestBody ChatRoom chatRoom, @AuthenticationPrincipal UserDetails user) {
+    public void createRoom(@RequestBody ChatRoom chatRoom, @AuthenticationPrincipal User user) {
         chatService.create(chatRoom, user.getUsername());
     }
 
+    // 방 목록
     @GetMapping(path = "/api/rooms")
-    public List<ChatMember> rooms(@RequestParam String username) {
+    public List<ChatMember> getRoomList(@RequestParam String username) {
         User user = userRepository.findByUsername(username).get();
         return chatMemberRepository.findByUserId(user);
     }
 
-    @GetMapping(path = "/rooms", params = "roomname")
-    public List<ChatRoom> goToRoom() {
-        return chatService.findAllRoom();
+    // 채팅방 입장, 방 정보 가져오기
+    @GetMapping(path = "/api/rooms", params = "roomname")
+    public Optional<ChatRoom> goToRoom(String roomname) {
+        return chatService.findRoom(roomname);
     }
 
-    @GetMapping("/api/room")
-    public Optional<ChatRoom> room(@RequestParam String id) {
-        return chatRepository.findById(1L);
-    }
+    // //
+    // @GetMapping("/api/room")
+    // public Optional<ChatRoom> room(@RequestParam String id) {
+    // return chatRepository.findById(1L);
+    // }
 
+    // 채팅, 유저 정보
     @GetMapping("/api/roomId")
-    public List<ChatMember> roomId(@RequestParam Long id) {
+    public List<ChatMember> getChatMembers(@RequestParam Long id) {
         ChatRoom chatRoom = chatRepository.findById(id).get();
         return chatMemberRepository.findByroomId(chatRoom);
     }
 
-    @PatchMapping("/api/rooms/invite")
-    public ChatRoom inviteUrl(@RequestBody Invite invite) {
-        return chatService.save(invite);
+    @PatchMapping("/api/rooms/{id}")
+    public ChatRoom inviteUrl(@RequestBody Invite invite, @PathVariable Long id) {
+        return chatService.save(id, invite);
     }
 
+    //
     @GetMapping(path = "/api/users")
     public User users(@RequestParam String username) {
         User user = userRepository.findByUsername(username).get();
         return user;
     }
 
-    @PostMapping("/api/nuser")
-    public ChatMember nuser(@RequestParam String username) {
+    @GetMapping("/api/nuser")
+    public ChatMember nuser(@RequestParam String token, @AuthenticationPrincipal User user) {
         ChatMember chatMember = new ChatMember();
-        ChatRoom chatRoom = chatRepository.findById(1L).get();
+        Invite inv = inviteRepository.findByInviteUrl(token).get();
+        ChatRoom chatRoom = chatRepository.findByInvite(inv).get();
         chatMember.setRoomId(chatRoom);
-        User user = userRepository.findByUsername(username).get();
+        user = userRepository.findByUsername(user.getUsername()).get();
         chatMember.setUserId(user);
         return chatMemberRepository.save(chatMember);
     }

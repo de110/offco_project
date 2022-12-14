@@ -37,15 +37,13 @@ public class ChatService {
     private final UserRepository userRepository;
     private final InviteRepository inviteRepository;
 
-    public List<ChatRoom> findAllRoom() {
-        List<ChatRoom> result = chatRepository.findAll();
-        log.info("result: {}", result);
-        return result;
+    public Optional<ChatRoom> findRoom(String roomname) {
+        return chatRepository.findByRoomname(roomname);
     }
 
     @Transactional
-    public ChatRoom save(Invite invite) {
-        ChatRoom chatRoom = chatRepository.findById(1L).get();
+    public ChatRoom save(Long id, Invite invite) {
+        ChatRoom chatRoom = chatRepository.findById(id).get();
         inviteRepository.save(invite);
         chatRoom.setInvite(invite);
         return chatRepository.save(chatRoom);
@@ -57,6 +55,7 @@ public class ChatService {
         chatRoom.setUser(user);
         ChatMember chatMember = new ChatMember(); // room member 설정
         chatMember.setRoomId(chatRoom);
+        chatMember.setUserId(user);
         chatMemberRepository.save(chatMember);
         return chatRepository.save(chatRoom);
     }
