@@ -19,16 +19,16 @@ import lombok.RequiredArgsConstructor;
 public class CalendarController {
     private final CalendarService calendarService;
 
-    @PostMapping("/todolist")
-    public void saveCalendar(@RequestBody Calendar calendar) { // 회원 추가
-        calendarService.save(calendar);
+    @PostMapping("/api/todolist")
+    public void saveCalendar(@RequestBody Calendar calendar, @RequestParam Long id) { // 회원 추가
+        calendarService.save(calendar, id);
 
     }
 
     @GetMapping("/todolist")
-    public List<Calendar> getCalendarByroomId() {
+    public List<Calendar> getCalendarByroomId(@RequestParam Long id) {
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.setRoomId(1L);
+        chatRoom.setRoomId(id);
         return calendarService.getCalendarByRoomId(chatRoom);
     }
 }

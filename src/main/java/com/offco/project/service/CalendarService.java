@@ -20,8 +20,8 @@ public class CalendarService {
     private final ChatRepository chatRepository;
 
     @Transactional
-    public Long save(Calendar calendar) {
-        ChatRoom chatRoom = chatRepository.findById(1L).get();
+    public Long save(Calendar calendar, Long id) {
+        ChatRoom chatRoom = chatRepository.findById(id).get();
         return calendarRepository.save(Calendar.builder()
                 .title(calendar.getTitle())
                 .createdAt(calendar.getCreatedAt())
