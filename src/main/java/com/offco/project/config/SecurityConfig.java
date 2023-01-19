@@ -6,33 +6,24 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.offco.project.service.UserService;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -59,12 +50,10 @@ public class SecurityConfig {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                             Authentication authentication) throws IOException, ServletException {
-                        // System.out.println("authentication: " + authentication.getName());
-                        // 로그인에 성공한 유저의 이름
                         response.sendRedirect("http://localhost:8080/home/" + authentication.getName());
                     }
                 })
-                // .usernameParameter("userId")
+
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
@@ -80,14 +69,11 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                // .defaultSuccessUrl("localhost:8080/home/1")
-                // .usernameParameter("userId")
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "cookies", "cookie")
                 .permitAll();
-        // http.logout().logoutUrl("/logout").logoutSuccessUrl("/suc").invalidateHttpSession(true).deleteCookies("JSESSIONID");
 
         http.rememberMe().userDetailsService(userService);
         return http.build();

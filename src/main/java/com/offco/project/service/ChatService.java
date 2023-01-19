@@ -1,14 +1,9 @@
 package com.offco.project.service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.offco.project.domain.ChatMember;
@@ -16,7 +11,6 @@ import com.offco.project.domain.ChatMessage;
 import com.offco.project.domain.ChatRoom;
 import com.offco.project.domain.Invite;
 import com.offco.project.domain.User;
-import com.offco.project.dto.UserDto;
 import com.offco.project.repository.ChatMemberRepository;
 import com.offco.project.repository.ChatRepository;
 import com.offco.project.repository.InviteRepository;
@@ -24,10 +18,8 @@ import com.offco.project.repository.MessageRepository;
 import com.offco.project.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ChatService {
 
@@ -60,11 +52,11 @@ public class ChatService {
         return chatRepository.save(chatRoom);
     }
 
-    public ChatRoom test(ChatRoom chatRoom, String username) {
-        User user = userRepository.findByUsername(username).get();
-        chatRoom.setUser(user);
-        return chatRepository.save(chatRoom);
-    }
+    // public ChatRoom test(ChatRoom chatRoom, String username) {
+    // User user = userRepository.findByUsername(username).get();
+    // chatRoom.setUser(user);
+    // return chatRepository.save(chatRoom);
+    // }
 
     @Transactional
     public ChatMessage saveMessage(ChatMessage chatMessage) {

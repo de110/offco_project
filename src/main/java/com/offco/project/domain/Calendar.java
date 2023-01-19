@@ -1,13 +1,11 @@
 package com.offco.project.domain;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +27,11 @@ public class Calendar {
     private String createdAt;
 
     @ManyToOne
-    @JoinColumn(name="ROOM_ID")
+    @JoinColumn(name = "ROOM_ID")
     private ChatRoom chatRoom;
 
     @Builder
-    public Calendar(String title, String createdAt,ChatRoom chatRoom) {
+    public Calendar(String title, String createdAt, ChatRoom chatRoom) {
         this.title = title;
         this.createdAt = createdAt;
         this.chatRoom = chatRoom;

@@ -1,7 +1,5 @@
 package com.offco.project.service;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import org.springframework.security.core.userdetails.UserDetails;

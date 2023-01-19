@@ -1,13 +1,7 @@
 package com.offco.project.controller;
 
-import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 
 import com.offco.project.domain.ChatMember;
 import com.offco.project.domain.ChatRoom;
@@ -19,21 +13,13 @@ import com.offco.project.repository.InviteRepository;
 import com.offco.project.repository.UserRepository;
 import com.offco.project.service.ChatService;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class ChatRoomController {
     private final ChatService chatService;
     private final UserRepository userRepository;
@@ -78,7 +64,6 @@ public class ChatRoomController {
         return chatService.save(id, invite);
     }
 
-    //
     @GetMapping(path = "/api/users")
     public User users(@RequestParam String username) {
         User user = userRepository.findByUsername(username).get();
