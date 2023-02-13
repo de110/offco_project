@@ -30,24 +30,25 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final ChatMemberRepository chatMemberRepository;
+
+    @PostMapping("/login")
+    public TokenInfo login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        String memberId = memberLoginRequestDto.getMemberId();
+        String password = memberLoginRequestDto.getPassword();
+        TokenInfo tokenInfo = memberService.login(memberId, password);
+        return tokenInfo;
+    }
+
     // @PostMapping("/login")
-    // public TokenInfo login(@RequestBody MemberLoginRequestDto
+    // public MemberLoginRequestDto login(@RequestBody MemberLoginRequestDto
     // memberLoginRequestDto) {
     // String memberId = memberLoginRequestDto.getMemberId();
     // String password = memberLoginRequestDto.getPassword();
-    // TokenInfo tokenInfo = memberService.login(memberId, password);
-    // return tokenInfo;
+    // // Boolean setlogin = memberLoginRequestDto.getSetlogin();
+    // // TokenInfo tokenInfo = memberService.login(memberId, password);
+    // memberService.login(memberId, password);
+    // return memberLoginRequestDto;
     // }
-
-    @PostMapping("/login")
-    public MemberLoginRequestDto login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        String memberId = memberLoginRequestDto.getMemberId();
-        String password = memberLoginRequestDto.getPassword();
-        Boolean setlogin = memberLoginRequestDto.getSetlogin();
-        // TokenInfo tokenInfo = memberService.login(memberId, password);
-        memberService.login(memberId, password, setlogin);
-        return memberLoginRequestDto;
-    }
 
     @GetMapping("/login")
     public String rememberId(@RequestParam String id) {

@@ -6,5 +6,7 @@ import lombok.Data;
 public class MemberLoginRequestDto {
     private String memberId;
     private String password;
-    private Boolean setlogin;
+    // private Boolean setlogin;
+    private String usermail;
+    private String username;
 }
