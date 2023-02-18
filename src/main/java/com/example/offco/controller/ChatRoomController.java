@@ -26,8 +26,8 @@ public class ChatRoomController {
     }
 
     @GetMapping("/chatuser")
-    public Optional<ChatRoom> checkChat(@RequestParam String userid, @RequestParam Long homeId) {
-        return chatRoomRepository.findById(homeId);
+    public List<ChatRoom> checkChat(@RequestParam String userid, @RequestParam Long homeId) {
+        return chatRoomRepository.findByRoomId(homeId);
     }
 
     @GetMapping("/chat")

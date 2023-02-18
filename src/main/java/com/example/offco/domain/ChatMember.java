@@ -32,9 +32,20 @@ public class ChatMember {
     @JoinColumn(name = "ROOM_ID")
     private Room roomId;
 
+    /* */
+    public static ChatMember create(String memberId, String roomname) {
+        ChatMember cMember = new ChatMember();
+        cMember.memberId = memberId;
+        Room room = Room.sv(roomname);
+        room.getManager();
+        cMember.roomId = room;
+        return cMember;
+    }
+    /* */
+
     @Builder
-    public ChatMember(String memberId, Room roomId) {
+    public ChatMember(String memberId, Room room) {
         this.memberId = memberId;
-        this.roomId = roomId;
+        this.roomId = room;
     }
 }

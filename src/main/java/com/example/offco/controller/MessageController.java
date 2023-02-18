@@ -32,8 +32,7 @@ public class MessageController {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setMessage(message.getSender() + "님이 입장하였습니다.");
         }
-        sendingOperations.convertAndSend("/sub/chat/room/",
-                message);
+        sendingOperations.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 
         return chatRoomService.saveMessage(message);
 
@@ -47,7 +46,7 @@ public class MessageController {
     }
 
     // 특정 채팅방 채팅 내역 조회
-    @GetMapping("/chat/messages")
+    @GetMapping("/api/chat/messages")
     @ResponseBody
     public List<ChatMessage> getRoomParam(@RequestParam String roomId) {
         return messageService.findByRoomId(roomId);
