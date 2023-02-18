@@ -16,6 +16,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     // Optional<Room> findByRoomname(String roomname);
 
+    List<Room> findByRoomname(String roomname);
+
     Optional<Room> findByToken(Invite invite);
 
     // // List<Room> findByInviteUrl(String inviteUrl);

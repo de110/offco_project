@@ -43,6 +43,23 @@ public class Room {
         return room;
     }
 
+    /* */
+
+    public static Room save(String roomname, String manager) {
+        Room room = new Room();
+        room.roomname = roomname;
+        room.manager = manager;
+        return room;
+    }
+
+    public static Room sv(String roomname) {
+        Room room = new Room();
+        room.roomname = roomname;
+        return room;
+    }
+
+    /* */
+
     @Builder
     public Room(String roomname, String manager, Invite token) {
         this.roomname = roomname;

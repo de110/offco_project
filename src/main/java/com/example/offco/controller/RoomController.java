@@ -12,6 +12,7 @@ import com.example.offco.domain.ChatRoom;
 import com.example.offco.domain.Invite;
 import com.example.offco.domain.Member;
 import com.example.offco.domain.Room;
+import com.example.offco.dto.RoomMemberDto;
 import com.example.offco.repository.ChatMemberRepository;
 import com.example.offco.repository.InviteRepository;
 import com.example.offco.repository.MemberRepository;
@@ -31,9 +32,21 @@ public class RoomController {
     private final InviteRepository inviteRepository;
 
     // 방 생성
+    // @PostMapping("/api/room")
+    // public Room createRoom(@RequestBody Room Room) {
+    // return roomService.create(Room);
+    // }
+
     @PostMapping("/api/room")
-    public Room createRoom(@RequestBody Room Room) {
-        return roomService.create(Room);
+    public ChatMember createRoom(@RequestBody RoomMemberDto room) {
+        Room rRoom = Room.save(room.getRoomname(), room.getManager());
+        roomRepository.save(rRoom);
+
+        ChatMember cMember = new ChatMember();
+        cMember.setRoomId(rRoom);
+        cMember.setMemberId(room.getManager());
+
+        return chatMemberRepository.save(cMember);
     }
 
     @PostMapping("/room/{roomId}/user")

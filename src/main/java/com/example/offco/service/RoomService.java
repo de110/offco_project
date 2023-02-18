@@ -25,22 +25,33 @@ public class RoomService {
 
     private final MemberRepository memberRepository;
     private final ChatMemberRepository chatMemberRepository;
-    private final RoomRepository RoomRepository;
+    private final RoomRepository roomRepository;
     private final InviteRepository inviteRepository;
     private final MessageRepository messageRepository;
 
     // 방 생성
-    @Transactional
-    public Room create(Room Room) {
-        return RoomRepository.save(Room);
-    }
+    // @Transactional
+    // public Room create(Room Room) {
+    // ChatMember cmember = new ChatMember();
+    // chatMemberRepository.save(cmember);
+    // return roomRepository.save(Room);
+    // }
+
+    /* */
+
+    // @Transactional
+    // public Room create(String memberId, String roomId) {
+
+    // }
+
+    /* */
 
     @Transactional
     public Room savetoken(Long id, Invite invite) {
-        Room Room = RoomRepository.findById(id).get();
+        Room Room = roomRepository.findById(id).get();
         inviteRepository.save(invite);
         Room.setToken(invite);
-        return RoomRepository.save(Room);
+        return roomRepository.save(Room);
     }
 
     public Boolean checkToken(String token) {
@@ -60,7 +71,7 @@ public class RoomService {
 
     @Transactional
     public void deleteRoom(String roomId) {
-        RoomRepository.deleteByRoomId(roomId);
+        roomRepository.deleteByRoomId(roomId);
     }
 
     @Transactional
